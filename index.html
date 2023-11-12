@@ -100,10 +100,6 @@
         #copyButton:hover {
             background-color: #a40000;
             color: white;
-
-        }
-
-        #copyButton:hover {
             transition: background-color 0.5s;
         }
 
@@ -131,9 +127,9 @@
             var inputText = document.getElementById("inputText").value;
 
             // Process the text
-            var processedText = inputText.replace(/\b(\w|[\.,'"!@#$%^&*()_+={}[\]:;<>,?/~`-])\b/g, function(match, punctuation) {
+            var processedText = inputText.replace(/(\b\w|\W)/g, function(match) {
                 // Change the color of the first letter or punctuation to black
-                return '<span style="color: black;">' + punctuation + '</span>';
+                return '<span style="color: black;">' + match + '</span>';
             });
 
             // Display the result
@@ -148,7 +144,13 @@
             window.getSelection().addRange(range);
             document.execCommand("copy");
             window.getSelection().removeAllRanges();
-            alert("Text copied to clipboard!");
+
+            // Show the copy popup
+            var copyPopup = document.getElementById("copyPopup");
+            copyPopup.style.display = "block";
+            setTimeout(function() {
+                copyPopup.style.display = "none";
+            }, 3000); // Hide after 3 seconds
         }
     </script>
 </body>
