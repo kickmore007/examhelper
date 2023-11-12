@@ -131,9 +131,9 @@
             var inputText = document.getElementById("inputText").value;
 
             // Process the text
-            var processedText = inputText.replace(/\b(\w)(\w*)\b/g, function(match, firstLetter, restOfWord) {
-                // Change the color of the first letter to black and the rest of the word to white
-                return '<span style="color: black;">' + firstLetter + '</span><span style="color: white;">' + restOfWord + '</span>';
+            var processedText = inputText.replace(/\b(\w|[\.,'"!@#$%^&*()_+={}[\]:;<>,?/~`-])\b/g, function(match, punctuation) {
+                // Change the color of the first letter or punctuation to black
+                return '<span style="color: black;">' + punctuation + '</span>';
             });
 
             // Display the result
