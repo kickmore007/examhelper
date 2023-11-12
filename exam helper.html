@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Helper</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        #infoTab {
+            max-width: 400px;
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        #inputText {
+            width: 300px;
+            height: 100px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            padding: 10px;
+            
+            margin-bottom: 10px;
+            background-color: black;
+            color: white;
+        }
+
+        button {
+            padding: 10px;
+            margin: 5px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff1467;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #processButton:hover {
+            background-color: #a40000;
+            transition: 0.3s;
+        }
+
+        #processButton:hover::before {
+            content: '➔';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            text-align: center;
+            animation: arrowAnimation 2s infinite;
+            
+        }
+
+        @keyframes arrowAnimation {
+            0% {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+        }
+
+        #copyButton {
+            background-color: #ff1467;
+            color: white;
+        }
+
+        #copyButton:hover {
+            background-color: #a40000;
+            color: white;
+
+        }
+
+        #copyButton:hover {
+            transition: background-color 0.5s;
+        }
+
+        #result {
+            margin-top: 20px;
+            white-space: pre-wrap;
+            filter: invert(100%);
+        }
+    </style>
+</head>
+<body>
+    <h1>Exam Helper</h1>
+    <div id="infoTab">Input some text, and out comes the first letter of each word and punctuation. This will help you in the process of remembering text.</div>
+    <label for="inputText">Input Text:</label>
+    <textarea id="inputText" rows="4" cols="50"></textarea>
+    <br>
+    <button id="processButton" onclick="processText()">Process Text</button>
+    <button id="copyButton" onclick="copyToClipboard()">Copy to Clipboard</button>
+
+    <div id="result"></div>
+
+    <script>
+        function processText() {
+            // Get the input text
+            var inputText = document.getElementById("inputText").value;
+
+            // Process the text
+            var processedText = inputText.replace(/\b(\w)(\w*)\b/g, function(match, firstLetter, restOfWord) {
+                // Change the color of the first letter to black and the rest of the word to white
+                return '<span style="color: black;">' + firstLetter + '</span><span style="color: white;">' + restOfWord + '</span>';
+            });
+
+            // Display the result
+            document.getElementById("result").innerHTML = processedText;
+        }
+
+        function copyToClipboard() {
+            var resultElement = document.getElementById("result");
+            var range = document.createRange();
+            range.selectNode(resultElement);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            document.execCommand("copy");
+            window.getSelection().removeAllRanges();
+            alert("Text copied to clipboard!");
+        }
+    </script>
+</body>
+</html>
