@@ -1,72 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="transition-colors duration-300">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exam Helper</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body {
-            background-color: #121212;
-            color: white;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
+        @keyframes arrowAnimation {
+            0% { opacity: 0; transform: translateX(-50px); }
+            50% { opacity: 1; }
+            100% { opacity: 0; transform: translateX(50px); }
         }
-
-        h1 {
-            margin-bottom: 20px;
-        }
-
-        #infoTab {
-            max-width: 400px;
-            background-color: #333;
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 10px;
-        }
-
-        #inputText {
-            width: 300px;
-            height: 100px;
-            border: 2px solid #ccc;
-            border-radius: 10px;
-            padding: 10px;
-            
-            margin-bottom: 10px;
-            background-color: black;
-            color: white;
-        }
-
-        button {
-            padding: 10px;
-            margin: 5px;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-            background-color: #ff1467;
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-
-        #processButton:hover {
-            background-color: #a40000;
-            transition: 0.3s;
-        }
-
-        #processButton:hover::before {
+        .process-button:hover::before {
             content: '➔';
             position: absolute;
             left: 0;
@@ -75,60 +21,59 @@
             width: 100%;
             text-align: center;
             animation: arrowAnimation 2s infinite;
-            
-        }
-
-        @keyframes arrowAnimation {
-            0% {
-                opacity: 0;
-                transform: translateX(-50px);
-            }
-            50% {
-                opacity: 1;
-            }
-            100% {
-                opacity: 0;
-                transform: translateX(50px);
-            }
-        }
-
-        #copyButton {
-            background-color: #ff1467;
-            color: white;
-        }
-
-        #copyButton:hover {
-            background-color: #a40000;
-            color: white;
-            transition: background-color 0.5s;
-        }
-
-        #result {
-            margin-top: 20px;
-            white-space: pre-wrap;
-            filter: invert(100%);
         }
     </style>
 </head>
-<body>
-    <h1>Exam Helper</h1>
-    <div id="infoTab">Input some text, and out comes the first letter of each word and punctuation. This will help you in the process of remembering text.</div>
-    <label for="inputText">Input Text:</label>
-    <textarea id="inputText" rows="4" cols="50"></textarea>
-    <br>
-    <button id="processButton" onclick="processText()">Process Text</button>
-    <button id="copyButton" onclick="copyToClipboard()">Copy to Clipboard</button>
+<body class="bg-black text-white min-h-screen flex flex-col items-center justify-center p-4 transition-colors duration-300">
+    <div class="text-center space-y-6 max-w-md w-full">
+        <h1 class="text-3xl font-bold text-white mb-4">Exam Helper</h1>
+        
+        <div class="bg-white/10 text-white/80 p-4 rounded-lg text-sm mb-6">
+            Input some text, and out comes the first letter of each word and punctuation. 
+            This will help you in the process of remembering text.
+        </div>
 
-    <div id="result"></div>
+        <textarea 
+            id="inputText"
+            class="w-full bg-white/5 border border-white/20 rounded-xl p-4 text-white focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all"
+            rows="4"
+            placeholder="Enter your text here..."
+        ></textarea>
+
+        <div class="flex gap-3 justify-center">
+            <button 
+                id="processButton"
+                onclick="processText()"
+                class="process-button bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-full transition-all relative overflow-hidden group"
+            >
+                Process Text
+            </button>
+            <button 
+                id="copyButton"
+                onclick="copyToClipboard()"
+                class="bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-full transition-all"
+            >
+                Copy
+            </button>
+        </div>
+
+        <!-- Added filter:invert(100%) and maintained original color handling -->
+        <div id="result" class="mt-6 p-4 bg-white/5 rounded-lg text-left font-mono whitespace-pre-wrap filter invert"></div>
+    </div>
+
+    <!-- Copy Notification -->
+    <div id="copyPopup" class="fixed bottom-4 right-4 bg-pink-600 text-white px-4 py-2 rounded-lg hidden transition-all">
+        Copied to clipboard!
+    </div>
 
     <script>
         function processText() {
             // Get the input text
             var inputText = document.getElementById("inputText").value;
 
-            // Process the text
+            // Process the text (EXACTLY THE SAME AS BEFORE)
             var processedText = inputText.replace(/(\b\w|\W)/g, function(match) {
-                // Change the color of the first letter or punctuation to black
+                // Maintain original color:black styling
                 return '<span style="color: black;">' + match + '</span>';
             });
 
@@ -137,6 +82,7 @@
         }
 
         function copyToClipboard() {
+            // Exact same functionality as before
             var resultElement = document.getElementById("result");
             var range = document.createRange();
             range.selectNode(resultElement);
@@ -145,12 +91,10 @@
             document.execCommand("copy");
             window.getSelection().removeAllRanges();
 
-            // Show the copy popup
-            var copyPopup = document.getElementById("copyPopup");
+            // Show copy notification
+            const copyPopup = document.getElementById("copyPopup");
             copyPopup.style.display = "block";
-            setTimeout(function() {
-                copyPopup.style.display = "none";
-            }, 3000); // Hide after 3 seconds
+            setTimeout(() => copyPopup.style.display = "none", 2000);
         }
     </script>
 </body>
